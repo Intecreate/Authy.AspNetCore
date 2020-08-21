@@ -21,24 +21,24 @@ namespace Authy.AspNetCore
             _cred = cred;
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<bool> CanGenerateTwoFactorTokenAsync(UserManager<T> manager, T user)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            //var appUser = user as IdentityUser;
-            return false;
+            var key = await manager.GetAuthenticationTokenAsync(user, "Authy", "UserId");
+            return !string.IsNullOrWhiteSpace(key);
         }
 
-        public Task<string> GenerateAsync(string purpose, UserManager<T> manager, T user)
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task<string> GenerateAsync(string purpose, UserManager<T> manager, T user)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            throw new NotImplementedException();
+            return string.Empty;
         }
 
         public async Task<bool> ValidateAsync(string purpose, string token, UserManager<T> manager, T user)
         {
-            var claim = (await manager.GetClaimsAsync(user)).FirstOrDefault(c => c.Issuer == "Authy.AspNetCore" && c.Type == "authy.userid");
+            var userId = await manager.GetAuthenticationTokenAsync(user, "Authy", "UserId");
 
-            if (claim == null)
+            if (userId == null)
             {
                 return false;
             }
@@ -49,7 +49,7 @@ namespace Authy.AspNetCore
             client.DefaultRequestHeaders.Add("user-agent", "IntecreateAuthy");
             client.DefaultRequestHeaders.Add("X-Authy-API-Key", _cred.ApiKey);
 
-            var result = await client.GetAsync($"/protected/json/verify/{token}/{claim.Value}");
+            var result = await client.GetAsync($"/protected/json/verify/{token}/{userId}");
 
             _logger.LogDebug(result.ToString());
             _logger.LogDebug(result.Content.ReadAsStringAsync().Result);

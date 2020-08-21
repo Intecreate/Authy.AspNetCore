@@ -67,8 +67,7 @@ namespace Authy.AspNetCore
                 if (document.RootElement.GetProperty("success").GetBoolean())
                 {
                     var userId = document.RootElement.GetProperty("user").GetProperty("id").GetInt64().ToString();
-                    var claim = new Claim("authy.userid", userId, "uid", "Authy.AspNetCore");
-                    await manager.AddClaimAsync(user, claim);
+                    await manager.SetAuthenticationTokenAsync(user, "Authy", "UserId", userId);
 
                     return userId;
                 }
