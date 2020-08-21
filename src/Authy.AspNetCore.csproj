@@ -5,7 +5,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Company>Intecreate Software Inc.</Company>
     <Authors>Intecreate Software Inc.</Authors>
-    <Version>0.1.0-beta</Version>
+    <Version>0.1.1-beta</Version>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <Description />
   </PropertyGroup>

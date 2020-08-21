@@ -31,17 +31,15 @@ namespace Authy.AspNetCore
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<AuthyCall2FA> _logger;
-        private readonly HttpClient _client;
+        private readonly IHttpClientFactory _factory;
+        private readonly AuthyCredentials _cred;
 
-        public AuthyCall2FA(AuthyCredentials config, IHttpClientFactory clientFactory, ILogger<AuthyCall2FA> logger)
+        public AuthyCall2FA(AuthyCredentials cred, IHttpClientFactory clientFactory, ILogger<AuthyCall2FA> logger)
         {
             _clientFactory = clientFactory;
             _logger = logger;
-            _client = _clientFactory.CreateClient();
-            _client.BaseAddress = new Uri("https://api.authy.com");
-            _client.DefaultRequestHeaders.Add("Accept", "application/json");
-            _client.DefaultRequestHeaders.Add("user-agent", "IntecreateAuthy");
-            _client.DefaultRequestHeaders.Add("X-Authy-API-Key", config.ApiKey);
+            _factory = _clientFactory;
+            _cred = cred;
         }
 
         public async Task<string> RegisterUserAsync<T>(AuthyUser authyUser, UserManager<T> manager, T user) where T : IdentityUser
@@ -49,7 +47,13 @@ namespace Authy.AspNetCore
             var postDataJson = JsonSerializer.Serialize(new LazyAuthyHelper { User = authyUser });
             var content = new StringContent(postDataJson, Encoding.UTF8, "application/json");
 
-            var result = await _client.PostAsync("/protected/json/users/new", content);
+            var client = _factory.CreateClient();
+
+            client.BaseAddress = new Uri("https://api.authy.com");
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            client.DefaultRequestHeaders.Add("user-agent", "IntecreateAuthy");
+            client.DefaultRequestHeaders.Add("X-Authy-API-Key", _cred.ApiKey);
+            var result = await client.PostAsync("/protected/json/users/new", content);
 
             _logger.LogDebug(result.Content.ReadAsStringAsync().Result);
 

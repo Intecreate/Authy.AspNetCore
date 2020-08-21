@@ -12,5 +12,7 @@ namespace Authy.AspNetCore
             var userType = builder.UserType;
             return builder.AddTokenProvider("Authy", typeof(AuthyTwoFactorTokenProvider<T>));
         }
+
+
     }
 }
