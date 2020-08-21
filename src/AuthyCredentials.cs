@@ -2,6 +2,11 @@
 {
     public class AuthyCredentials
     {
-        public string ApiKey { get; set; }
+        public AuthyCredentials(string apiKey)
+        {
+            ApiKey = apiKey;
+        }
+
+        internal string ApiKey { get; set; }
     }
 }
