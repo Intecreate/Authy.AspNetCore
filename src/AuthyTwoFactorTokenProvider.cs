@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Authy.AspNetCore
@@ -13,12 +13,19 @@ namespace Authy.AspNetCore
         private readonly ILogger<AuthyTwoFactorTokenProvider<T>> _logger;
         private readonly IHttpClientFactory _factory;
         private readonly AuthyCredentials _cred;
+        private readonly HttpClient _client;
 
         public AuthyTwoFactorTokenProvider(AuthyCredentials cred, ILogger<AuthyTwoFactorTokenProvider<T>> logger, IHttpClientFactory factory)
         {
             _logger = logger;
             _factory = factory;
             _cred = cred;
+            _client = factory.CreateClient();
+
+            _client.BaseAddress = new Uri("https://api.authy.com");
+            _client.DefaultRequestHeaders.Add("Accept", "application/json");
+            _client.DefaultRequestHeaders.Add("user-agent", "AuthyAspNetCore/0.1.9");
+            _client.DefaultRequestHeaders.Add("X-Authy-API-Key", _cred.ApiKey);
         }
 
         public async Task<bool> CanGenerateTwoFactorTokenAsync(UserManager<T> manager, T user)
@@ -36,29 +43,46 @@ namespace Authy.AspNetCore
 
         public async Task<bool> ValidateAsync(string purpose, string token, UserManager<T> manager, T user)
         {
-            var userId = await manager.GetAuthenticationTokenAsync(user, "Authy", "UserId");
-
-            if (userId == null)
+            HttpResponseMessage result;
+            if (token.Length <= 10)
             {
-                return false;
+                var userId = await manager.GetAuthenticationTokenAsync(user, "Authy", "UserId");
+
+                if (userId == null)
+                {
+                    return false;
+                }
+
+                result = await _client.GetAsync($"/protected/json/verify/{token}/{userId}");
+
+                var message = await result.Content.ReadAsStringAsync();
+                _logger.LogDebug(message);
+
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    return true;
+                }
             }
-
-            var client = _factory.CreateClient();
-            client.BaseAddress = new Uri("https://api.authy.com");
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-            client.DefaultRequestHeaders.Add("user-agent", "IntecreateAuthy");
-            client.DefaultRequestHeaders.Add("X-Authy-API-Key", _cred.ApiKey);
-
-            var result = await client.GetAsync($"/protected/json/verify/{token}/{userId}");
-
-            _logger.LogDebug(result.ToString());
-            _logger.LogDebug(result.Content.ReadAsStringAsync().Result);
-
-            var message = await result.Content.ReadAsStringAsync();
-
-            if (result.StatusCode == HttpStatusCode.OK)
+            else
             {
-                return true;
+                result = await _client.GetAsync($"/onetouch/json/approval_requests/{token}");
+
+                if (result.StatusCode != HttpStatusCode.OK)
+                {
+                    return false;
+                }
+
+                var response = await result.Content.ReadAsStreamAsync();
+
+                using (JsonDocument document = await JsonDocument.ParseAsync(response))
+                {
+                    if (document.RootElement.GetProperty("success").GetBoolean())
+                    {
+                        var status = document.RootElement.GetProperty("approval_request").GetProperty("status").GetString();
+
+                        return status == "approved";
+                    }
+                }
             }
 
             return false;
