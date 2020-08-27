@@ -36,7 +36,7 @@ namespace Authy.AspNetCore
             _client = _factory.CreateClient();
             _client.BaseAddress = new Uri("https://api.authy.com");
             _client.DefaultRequestHeaders.Add("Accept", "application/json");
-            _client.DefaultRequestHeaders.Add("user-agent", "AuthyAspNetCore/0.1.9");
+            _client.DefaultRequestHeaders.Add("user-agent", "AuthyAspNetCore/0.1.10");
             _client.DefaultRequestHeaders.Add("X-Authy-API-Key", _cred.ApiKey);
         }
 
@@ -160,6 +160,22 @@ namespace Authy.AspNetCore
             {
                 return document.RootElement.GetProperty("approval_request").GetProperty("uuid").GetString();
             }
+        }
+
+        public async Task<bool> SetUserPreferredVerificationTypeAsync<T>(UserManager<T> manager, T user, VerificationType verificationType) where T : IdentityUser
+        {
+            await manager.SetAuthenticationTokenAsync(user, "Authy", "PrefVerificaiton", verificationType.ToString());
+            return true;
+        }
+
+        public async Task<VerificationType> GetUserPreferredVerificationTypeAsync<T>(UserManager<T> manager, T user) where T : IdentityUser
+        {
+            var token = await manager.GetAuthenticationTokenAsync(user, "Authy", "PrefVerificaiton");
+            if (token != null && Enum.TryParse<VerificationType>(token, out var res))
+            {
+                return res;
+            }
+            return VerificationType.UNKNOWN;
         }
     }
 }

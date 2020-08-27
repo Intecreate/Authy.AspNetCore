@@ -9,6 +9,7 @@ namespace Authy.AspNetCore
         TOTP,
         SMS,
         VOICE,
-        PUSH
+        PUSH,
+        UNKNOWN
     }
 }

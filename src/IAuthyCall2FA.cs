@@ -14,5 +14,9 @@ namespace Authy.AspNetCore
         Task<bool> CreateVerification<T>(UserManager<T> manager, T user, VerificationType verificationType, bool force = false) where T : IdentityUser;
 
         Task<string> CreatePushVerificaiton<T>(UserManager<T> manager, T user, AuthyPushNotificationDetails details) where T : IdentityUser;
+
+        Task<bool> SetUserPreferredVerificationTypeAsync<T>(UserManager<T> manager, T user, VerificationType verificationType) where T : IdentityUser;
+
+        Task<VerificationType> GetUserPreferredVerificationTypeAsync<T>(UserManager<T> manager, T user) where T : IdentityUser;
     }
 }
