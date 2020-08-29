@@ -26,7 +26,7 @@ Now that you have added Authy.AspNetCore you can create a user as follows (you s
 
 ```cs
 //Note: IAuthyCall2FA is registered with DI
-private readonly IAuthyCall2FA _authy;
+private readonly IAuthyClient _authy;
 
 public async Task<IActionResult> OnPostAsync()
 {
