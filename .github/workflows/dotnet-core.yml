@@ -30,7 +30,7 @@ jobs:
         -register:user
         -target:"dotnet.exe"
         -targetargs:"./src/packages/xunit.runner.console/2.4.1/tools/netcoreapp2.0/xunit.console.dll ./src/Authy.AspNetCore.Tests/bin/Debug/netcoreapp3.1/Authy.AspNetCore.Tests.dll"
-        -filter:"+[Marqeta.*]* -[*.Tests]*"
+        -filter:"+[Authy.*]* -[*.Tests]*"
         -output:"./coverage.xml"
         -oldstyle
       
