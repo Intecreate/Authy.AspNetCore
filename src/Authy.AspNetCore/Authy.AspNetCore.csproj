@@ -11,11 +11,9 @@
     <PackageProjectUrl>https://github.com/Intecreate/Authy.AspNetCore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Intecreate/Authy.AspNetCore.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+	<IsTestProject>false</IsTestProject>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugType>Full</DebugType>
-  </PropertyGroup>
   <ItemGroup>
     <None Remove="AuthyCall2FA.cs~RF1543fac0.TMP" />
     <None Include="..\..\License.txt">
