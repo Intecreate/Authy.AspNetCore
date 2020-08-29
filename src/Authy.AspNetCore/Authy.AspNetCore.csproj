@@ -13,6 +13,9 @@
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>Full</DebugType>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="AuthyCall2FA.cs~RF1543fac0.TMP" />
     <None Include="..\..\License.txt">
