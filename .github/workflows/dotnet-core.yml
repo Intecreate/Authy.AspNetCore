@@ -12,10 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core 2.2
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 2.2.104
     - name: Setup .NET Core 3.1
       uses: actions/setup-dotnet@v1
       with:
@@ -30,6 +26,11 @@ jobs:
       run: dotnet build --configuration Release --no-restore
       working-directory: ./src
       
+    - name: Setup .NET Core 2.2
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 2.2.104
+
     - name: Test
       run: >-
         ./src/packages/opencover/4.7.922/tools/OpenCover.Console.exe
@@ -50,4 +51,4 @@ jobs:
       with:
         name: workflow-artifact
         # Directory containing files to upload
-        path: ./src/Authy.AspNetCore/bin/Debug/netcoreapp3.1/
+        path: ./src/Authy.AspNetCore/bin/Release/netcoreapp3.1/
