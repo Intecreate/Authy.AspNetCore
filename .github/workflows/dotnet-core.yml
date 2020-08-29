@@ -30,7 +30,7 @@ jobs:
         ./src/packages/opencover/4.7.922/tools/OpenCover.Console.exe
         -register:user
         -target:"dotnet.exe"
-        -targetargs:"./src/packages/xunit.runner.console/2.4.1/tools/netcoreapp2.0/xunit.console.dll ./src/Authy.AspNetCore.Tests/bin/Debug/netcoreapp3.1/Authy.AspNetCore.Tests.dll"
+        -targetargs:"./src/packages/xunit.runner.console/2.4.1/tools/netcoreapp2.0/xunit.console.dll ./src/Authy.AspNetCore.Tests/bin/Release/netcoreapp3.1/Authy.AspNetCore.Tests.dll"
         -filter:"+[Authy.*]* -[*.Tests]*"
         -output:"./coverage.xml"
         -oldstyle
