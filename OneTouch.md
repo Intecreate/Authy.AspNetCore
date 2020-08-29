@@ -6,8 +6,8 @@ Implementing OneTouch can be done in several ways. This is a method that allows 
 
 Modify the LoginWith2fa.cshtml.cs class to contain the following
 ```cs
-//Note: IAuthyCall2FA is registered with DI
-private readonly IAuthyCall2FA _authy;
+//Note: IAuthyClient is registered with DI
+private readonly IAuthyClient _authy;
 
 //This should be part of the model
 public string PushLoginId { get; set; }
@@ -40,7 +40,7 @@ public async Task<IActionResult> OnGetAsync(bool rememberMe = false, string retu
     if (pref == VerificationType.PUSH)
     {
         PushLoginId = Guid.NewGuid().ToString();
-        var pushCode = await _authy.CreatePushVerificaiton(_userManager, user, new AuthyPushNotificationDetails
+        var pushCode = await _authy.CreateOneTouchPush(_userManager, user, new AuthyPushNotificationDetails
         {
             Message = $"{user.Username}, please verify that you are trying to login. If you did not initiate this request, click deny.",
             Details = new Dictionary<string, string>()
