@@ -1,0 +1,48 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+
+    - name: Install dependencies
+      run: dotnet restore
+      working-directory: ./src
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      working-directory: ./src
+      
+    - name: Test
+      run: >-
+        ./src/packages/opencover/4.7.922/tools/OpenCover.Console.exe
+        -register:user
+        -target:"dotnet.exe"
+        -targetargs:"./src/packages/xunit.runner.console/2.4.1/tools/netcoreapp2.0/xunit.console.dll ./src/Authy.AspNetCore.Tests/bin/Debug/netcoreapp3.1/Authy.AspNetCore.Tests.dll"
+        -filter:"+[Authy.*]* -[*.Tests]*"
+        -output:"./coverage.xml"
+        -oldstyle
+      
+    - name: Codecov
+      uses: codecov/codecov-action@v1.0.6
+      with:
+        file: ./coverage.xml
+        flags: unittests
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: workflow-artifact
+        # Directory containing files to upload
+        path: ./src/Authy.AspNetCore/bin/Debug/netcoreapp3.1/
