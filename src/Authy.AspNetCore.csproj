@@ -1,13 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Company>Intecreate Software Inc.</Company>
     <Authors>Intecreate Software Inc.</Authors>
-    <Version>0.1.10-beta</Version>
+    <Version>0.1.11-beta</Version>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <Description />
+    <PackageProjectUrl>https://github.com/Intecreate/Authy.AspNetCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Intecreate/Authy.AspNetCore.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +27,7 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.7" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
+	  <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>

@@ -3,10 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Security.Claims;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Authy.AspNetCore
@@ -19,15 +16,15 @@ namespace Authy.AspNetCore
     }
 
 
-    public class AuthyCall2FA : IAuthyCall2FA
+    public class AuthyClient : IAuthyClient
     {
         private readonly IHttpClientFactory _clientFactory;
-        private readonly ILogger<AuthyCall2FA> _logger;
+        private readonly ILogger<AuthyClient> _logger;
         private readonly IHttpClientFactory _factory;
         private readonly HttpClient _client;
         private readonly AuthyCredentials _cred;
 
-        public AuthyCall2FA(AuthyCredentials cred, IHttpClientFactory clientFactory, ILogger<AuthyCall2FA> logger)
+        public AuthyClient(AuthyCredentials cred, IHttpClientFactory clientFactory, ILogger<AuthyClient> logger)
         {
             _clientFactory = clientFactory;
             _logger = logger;
@@ -62,7 +59,7 @@ namespace Authy.AspNetCore
                 if (document.RootElement.GetProperty("success").GetBoolean())
                 {
                     var userId = document.RootElement.GetProperty("user").GetProperty("id").GetInt64().ToString();
-                    await manager.SetAuthenticationTokenAsync(user, "Authy", "UserId", userId);
+                    await manager.SetAuthenticationTokenAsync(user, AuthyBuilder.AUTHY_TOKEN_PROVIDER_NAME, "UserId", userId);
 
                     return userId;
                 }
@@ -83,7 +80,7 @@ namespace Authy.AspNetCore
 
         public async Task<bool> CreateVerification<T>(UserManager<T> manager, T user, VerificationType verificationType, bool force = false) where T : IdentityUser
         {
-            var userId = await manager.GetAuthenticationTokenAsync(user, "Authy", "UserId");
+            var userId = await manager.GetAuthenticationTokenAsync(user, AuthyBuilder.AUTHY_TOKEN_PROVIDER_NAME, "UserId");
 
             if (userId == null)
             {
@@ -115,10 +112,10 @@ namespace Authy.AspNetCore
             }
         }
 
-        public async Task<string> CreatePushVerificaiton<T>(UserManager<T> manager, T user, AuthyPushNotificationDetails details) where T : IdentityUser
+        public async Task<string> CreateOneTouchPush<T>(UserManager<T> manager, T user, AuthyOneTouchDetails details) where T : IdentityUser
         {
 
-            var userId = await manager.GetAuthenticationTokenAsync(user, "Authy", "UserId");
+            var userId = await manager.GetAuthenticationTokenAsync(user, AuthyBuilder.AUTHY_TOKEN_PROVIDER_NAME, "UserId");
 
             if (userId == null)
             {
@@ -164,13 +161,13 @@ namespace Authy.AspNetCore
 
         public async Task<bool> SetUserPreferredVerificationTypeAsync<T>(UserManager<T> manager, T user, VerificationType verificationType) where T : IdentityUser
         {
-            await manager.SetAuthenticationTokenAsync(user, "Authy", "PrefVerificaiton", verificationType.ToString());
+            await manager.SetAuthenticationTokenAsync(user, AuthyBuilder.AUTHY_TOKEN_PROVIDER_NAME, "PrefVerificaiton", verificationType.ToString());
             return true;
         }
 
         public async Task<VerificationType> GetUserPreferredVerificationTypeAsync<T>(UserManager<T> manager, T user) where T : IdentityUser
         {
-            var token = await manager.GetAuthenticationTokenAsync(user, "Authy", "PrefVerificaiton");
+            var token = await manager.GetAuthenticationTokenAsync(user, AuthyBuilder.AUTHY_TOKEN_PROVIDER_NAME, "PrefVerificaiton");
             if (token != null && Enum.TryParse<VerificationType>(token, out var res))
             {
                 return res;

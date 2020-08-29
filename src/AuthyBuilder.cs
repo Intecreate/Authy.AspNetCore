@@ -4,6 +4,7 @@ using System;
 
 namespace Authy.AspNetCore
 {
+
     public static class AuthyBuilder
     {
         public const string AUTHY_TOKEN_PROVIDER_NAME = "Authy";
@@ -21,7 +22,7 @@ namespace Authy.AspNetCore
             }
 
             services.AddSingleton(credentials);
-            services.AddTransient<IAuthyCall2FA, AuthyCall2FA>();
+            services.AddTransient<IAuthyClient, AuthyClient>();
 
             return services;
         }
