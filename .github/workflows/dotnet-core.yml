@@ -8,8 +8,7 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -20,9 +19,11 @@ jobs:
 
     - name: Install dependencies
       run: dotnet restore
+      working-directory: ./src
       
     - name: Build
       run: dotnet build --configuration Release --no-restore
+      working-directory: ./src
       
     - name: Test
       run: >-
@@ -44,4 +45,4 @@ jobs:
       with:
         name: workflow-artifact
         # Directory containing files to upload
-        path: ./src/Marqeta.Net/bin/Debug/netcoreapp3.1/
+        path: ./src/Authy.AspNetCore/bin/Debug/netcoreapp3.1/
