@@ -23,32 +23,29 @@ jobs:
       working-directory: ./src
       
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Debug --no-restore
       working-directory: ./src
-      
-    - name: Setup .NET Core 2.2
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 2.2.104
 
     - name: Test
       run: >-
-        ./src/packages/opencover/4.7.922/tools/OpenCover.Console.exe
+        ./packages/opencover/4.7.922/tools/OpenCover.Console.exe
         -register:user
         -target:"dotnet.exe"
-        -targetargs:"./src/packages/xunit.runner.console/2.4.1/tools/netcoreapp2.0/xunit.console.dll ./src/Authy.AspNetCore.Tests/bin/Release/netcoreapp3.1/Authy.AspNetCore.Tests.dll"
+        -targetargs:"test"
         -filter:"+[Authy.*]* -[*.Tests]*"
         -output:"./coverage.xml"
         -oldstyle
+      working-directory: ./src
       
     - name: Codecov
       uses: codecov/codecov-action@v1.0.6
       with:
-        file: ./coverage.xml
+        file: ./src/coverage.xml
         flags: unittests
+
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: workflow-artifact
         # Directory containing files to upload
-        path: ./src/Authy.AspNetCore/bin/Release/netcoreapp3.1/
+        path: ./src/Authy.AspNetCore/bin/Debug/netcoreapp3.1/
