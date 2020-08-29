@@ -27,20 +27,13 @@ jobs:
       working-directory: ./src
 
     - name: Test
-      run: >-
-        ./packages/opencover/4.7.922/tools/OpenCover.Console.exe
-        -register:user
-        -target:"dotnet.exe"
-        -targetargs:"test"
-        -filter:"+[Authy.*]* -[*.Tests]*"
-        -output:"./coverage.xml"
-        -oldstyle
+      run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
       working-directory: ./src
       
     - name: Codecov
-      uses: codecov/codecov-action@v1.0.6
+      uses: codecov/codecov-action@v1.0.13
       with:
-        file: ./src/coverage.xml
+        file: ./src/Authy.AspNetCore.Test/coverage.opencover.xml
         flags: unittests
 
     - name: Upload artifact
