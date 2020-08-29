@@ -33,7 +33,7 @@ namespace Authy.AspNetCore
             _client = _factory.CreateClient();
             _client.BaseAddress = new Uri("https://api.authy.com");
             _client.DefaultRequestHeaders.Add("Accept", "application/json");
-            _client.DefaultRequestHeaders.Add("user-agent", "AuthyAspNetCore/0.1.10");
+            _client.DefaultRequestHeaders.Add("user-agent", "AuthyAspNetCore/0.1.11");
             _client.DefaultRequestHeaders.Add("X-Authy-API-Key", _cred.ApiKey);
         }
 

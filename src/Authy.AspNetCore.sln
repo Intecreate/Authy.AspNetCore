@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authy.AspNetCore", "Authy.AspNetCore.csproj", "{5AC30A7A-E1CF-450A-8668-9CE1C0071B73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authy.AspNetCore", "Authy.AspNetCore\Authy.AspNetCore.csproj", "{5AC30A7A-E1CF-450A-8668-9CE1C0071B73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authy.AspNetCore.Tests", "..\Authy.AspNetCore.Tests\Authy.AspNetCore.Tests.csproj", "{FE95858C-AE22-4E5F-A223-63C3296B8D07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authy.AspNetCore.Tests", "Authy.AspNetCore.Tests\Authy.AspNetCore.Tests.csproj", "{FE95858C-AE22-4E5F-A223-63C3296B8D07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
