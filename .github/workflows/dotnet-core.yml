@@ -28,7 +28,7 @@ jobs:
 
     - name: Test
       run: >-
-        ./src/packages/opencover/4.7.922/tools/OpenCover.Console.exe
+        ./packages/opencover/4.7.922/tools/OpenCover.Console.exe
         -register:user
         -target:"dotnet.exe"
         -targetargs:"test"
