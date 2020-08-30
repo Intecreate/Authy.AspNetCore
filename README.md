@@ -1,7 +1,11 @@
 # Authy.AspNetCore
-Authy.AspNetCore makes it easy for developers to replace the existing TOTP algorithm in asp.net core with Authy. 
+![.NET Core](https://github.com/Intecreate/Authy.AspNetCore/workflows/.NET%20Core/badge.svg)
+[![codecov](https://codecov.io/gh/Intecreate/Authy.AspNetCore/branch/master/graph/badge.svg)](https://codecov.io/gh/Intecreate/Authy.AspNetCore)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/Intecreate/Marqeta.Net/blob/master/LICENSE)
 
-### Authy.AspNetCore is in beta and you may encounter bugs. This project is subject to breaking changes.
+A library designed to replace the existing TOTP algorithm in asp.net core 3.1 with Authy (https://authy.com/)
+
+### Authy.AspNetCore is in development and you may encounter bugs. This project is subject to breaking changes.
 
 # Quick Start
 Using Authy.AspNetCore is easy. There are several "tricks" used that allow you to use Authy.AspNetCore without requiring any database migrations.
@@ -25,7 +29,7 @@ services.AddHttpClient();
 Now that you have added Authy.AspNetCore you can create a user as follows (you should verify that the user was created)
 
 ```cs
-//Note: IAuthyCall2FA is registered with DI
+//Note: IAuthyClient is registered with DI
 private readonly IAuthyClient _authy;
 
 public async Task<IActionResult> OnPostAsync()
@@ -54,4 +58,5 @@ public async Task<IActionResult> OnPostAsync()
 }
 ```
 
-You should not need to modify LoginWith2fa at all unless you want to use Authy OneTouch
+You should not need to modify LoginWith2fa at all unless you want to use Authy OneTouch. For more information about using OneTouch view 
+OneTouch.md 
