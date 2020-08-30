@@ -1,13 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Moq;
-using Moq.Protected;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 

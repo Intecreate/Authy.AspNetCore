@@ -55,12 +55,12 @@ namespace Authy.AspNetCore
 
                 result = await _client.GetAsync($"/protected/json/verify/{token}/{userId}");
 
-                var message = await result.Content.ReadAsStringAsync();
-                _logger.LogDebug(message);
+                var response = await result.Content.ReadAsStreamAsync();
 
-                if (result.StatusCode == HttpStatusCode.OK)
+                using (JsonDocument document = await JsonDocument.ParseAsync(response))
                 {
-                    return true;
+                    return result.StatusCode == HttpStatusCode.OK &&
+                        document.RootElement.GetProperty("success").GetString() == "true";
                 }
             }
             else

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -24,6 +22,19 @@ namespace Authy.AspNetCore.Tests
 
             var authyClient = CreateClient(res);
             Assert.False(await authyClient.CreateVerification(userManager.Object, new IdentityUser(), VerificationType.SMS, false));
+        }
+
+        [Fact]
+        public async Task TestCreateVerificationUnknown()
+        {
+            var res = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent("{\"success\":true,\"message\":\"SMS token was sent\",\"cellphone\":\"+1-XXX-XXX-XX02\"}")
+            };
+
+            var authyClient = CreateClient(res);
+            Assert.False(await authyClient.CreateVerification(userManager.Object, testUser, VerificationType.UNKNOWN, false));
         }
 
         #region SMS
@@ -101,7 +112,6 @@ namespace Authy.AspNetCore.Tests
             Assert.True(await authyClient.CreateVerification(userManager.Object, testUser, VerificationType.TOTP, true));
         }
         #endregion TOTP
-
 
         #region VOICE
         [Fact]
