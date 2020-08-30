@@ -114,7 +114,6 @@ namespace Authy.AspNetCore
 
         public async Task<string> CreateOneTouchPush<T>(UserManager<T> manager, T user, AuthyOneTouchDetails details) where T : IdentityUser
         {
-
             var userId = await manager.GetAuthenticationTokenAsync(user, AuthyBuilder.AUTHY_TOKEN_PROVIDER_NAME, "UserId");
 
             if (userId == null)
