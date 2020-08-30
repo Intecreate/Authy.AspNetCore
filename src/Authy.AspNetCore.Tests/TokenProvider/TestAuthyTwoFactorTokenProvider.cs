@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Moq;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -140,7 +142,7 @@ namespace Authy.AspNetCore.Tests.TokenProvider
             };
 
             var provider = CreateProvider(res);
-            Assert.False(await provider.ValidateAsync(null, Guid.NewGuid().ToString(), userManager.Object, testUser2));
+            Assert.False(await provider.ValidateAsync(null, "123456", userManager.Object, testUser2));
         }
     }
 }

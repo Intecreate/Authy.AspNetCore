@@ -48,7 +48,7 @@ namespace Authy.AspNetCore
             {
                 var userId = await manager.GetAuthenticationTokenAsync(user, "Authy", "UserId");
 
-                if (userId == null)
+                if (string.IsNullOrWhiteSpace(userId))
                 {
                     return false;
                 }
