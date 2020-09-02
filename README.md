@@ -1,7 +1,8 @@
 # Authy.AspNetCore
 ![.NET Core](https://github.com/Intecreate/Authy.AspNetCore/workflows/.NET%20Core/badge.svg)
-[![codecov](https://codecov.io/gh/Intecreate/Authy.AspNetCore/branch/master/graph/badge.svg)](https://codecov.io/gh/Intecreate/Authy.AspNetCore)
+[![Codecov](https://img.shields.io/codecov/c/github/Intecreate/Authy.AspNetCore)](https://codecov.io/gh/Intecreate/Authy.AspNetCore)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/Intecreate/Marqeta.Net/blob/master/LICENSE)
+[![Nuget](https://img.shields.io/nuget/dt/Authy.AspNetCore)](https://www.nuget.org/packages/Authy.AspNetCore)
 
 A library designed to replace the existing TOTP algorithm in asp.net core 3.1 with Authy (https://authy.com/)
 
